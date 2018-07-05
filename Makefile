@@ -8,3 +8,6 @@ clean:
 
 install:
 	go install $(PKG)
+
+test:
+	go test -v -cover ./...
