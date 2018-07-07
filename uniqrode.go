@@ -12,6 +12,7 @@ import (
     "bufio"
     "io"
     "flag"
+    "strings"
     ascii_mapper "github.com/dchirikov/uniqrode/ascii_mapper"
     qrcode "github.com/skip2/go-qrcode"
 )
@@ -19,13 +20,15 @@ import (
 var recovery_level_default = 2
 var mode_default = 2
 var inverse_default = false
+var notrim_default = false
 
 func showHelp() {
-    fmt.Println("Usage: uniqrode [-level=1..4] [-mode=1..3] [-inverse]")
+    fmt.Println(
+        "Usage: uniqrode [-level=1..4] [-mode=1..3] [-inverse] [-notrim]")
 }
 
 // Read input from pipe stdin
-func getInput() string {
+func getInput(trim bool) string {
     fi, err := os.Stdin.Stat()
     if err != nil {
         panic(err)
@@ -45,6 +48,10 @@ func getInput() string {
 		}
 		input = append(input, chunk)
 	}
+
+    if trim {
+        return strings.TrimSpace(string(input))
+    }
 
     return string(input)
 }
@@ -67,6 +74,9 @@ func main() {
         "mode", mode_default, "Draw mode")
     argInversePtr := flag.Bool(
         "inverse", inverse_default, "Draw inverse")
+    argNoTrimPtr := flag.Bool(
+        "notrim", notrim_default,
+        "Do not trim leading and trailing white spaces")
 
     // Parse arguments and check if they are valid
     flag.Parse()
@@ -86,7 +96,7 @@ func main() {
     }
 
     // Create QR code
-    q, err := qrcode.New(getInput(), recoveryLevel)
+    q, err := qrcode.New(getInput(!(*argNoTrimPtr)), recoveryLevel)
 
     if err != nil {
         panic (err)
