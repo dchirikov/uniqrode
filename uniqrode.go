@@ -12,7 +12,7 @@ import (
     "bufio"
     "io"
     "flag"
-    uniqrode "github.com/dchirikov/uniqrode/uniqrode"
+    ascii_mapper "github.com/dchirikov/uniqrode/ascii_mapper"
     qrcode "github.com/skip2/go-qrcode"
 )
 
@@ -95,7 +95,7 @@ func main() {
     // Draw ASCII picture
     bits := q.Bitmap()
 
-    u, err := uniqrode.New(*argDrawModePtr, !(*argInversePtr), &bits)
+    u, err := ascii_mapper.New(*argDrawModePtr, !(*argInversePtr), &bits)
 
     if err != nil {
         panic (err)

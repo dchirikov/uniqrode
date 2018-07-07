@@ -1,10 +1,9 @@
 PKG := github.com/dchirikov/uniqrode
 all:
-	mkdir -p bin
-	go build -o bin/uniqrode main.go
+	go build uniqrode.go
 
 clean:
-	rm -rf bin
+	[[ -x ./uniqrode ]] && rm -f ./uniqrode
 
 install:
 	go install $(PKG)
